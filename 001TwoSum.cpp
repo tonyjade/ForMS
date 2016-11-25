@@ -99,7 +99,29 @@ vector<int> twoSum(vector<int> nums, int target)
     return ret;
 }
 
-
+// 
+//
+//
+vector<int> twoSumBest(vector<int> nums, int target)
+{
+    vector<int> ret(2, -1);
+    unordered_map<int, int> map;
+    if (nums.size() <= 1)
+        return ret;
+    for (int i = 0; i < nums.size(); ++i)
+    {
+        int r_value = target - nums[i];
+        if (map.find(r_value) == end(map))    
+            map[nums[i]] = i;
+        else
+        {
+            ret[0] = map[r_value];
+            ret[1] = i;
+            return ret;
+        }	
+    }
+    return ret;
+}
 
 int main()
 {
