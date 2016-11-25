@@ -30,7 +30,7 @@ using namespace std;
 // 
 // ErrorOutput: the i and j are not the initial i and j anymore. 
 //
-vector<int> twoSum(vector<int> nums, int target)
+vector<int> twoSumError(vector<int> nums, int target)
 {
     vector<int> ret;
     if (nums.size() <= 1)
@@ -75,30 +75,35 @@ vector<int> twoSum(vector<int> nums, int target)
         return ret;
     }
     for (int i = 0; i < nums.size(); ++i)
-        map.insert(nums[i], i);
+        map[nums[i]] = i;   // ERROR: map.insert(nums[i], i) is wrong.
     for (int i = 0; i < nums.size(); ++i)
     {
-        r_value = target - nums[i];
-        if (map.find(r_value) != end(map))    
+        int r_value = target - nums[i];
+        if (map.find(r_value) != end(map) && map[r_value] != i)     
         {
-	    if ()
-	
-	} 
-    
-    
-    
+            if (i < map[r_value])
+            {
+                ret.push_back(i);
+                ret.push_back(map[r_value]);  // ERROR: ret.push_back(nums[r_value]);
+            } 
+            else
+            {    
+                ret.push_back(map[r_value]); // ERROR: ret.push_back(nums[r_value]);
+                ret.push_back(i); 
+            }
+            return ret;	
+	}     
     }
-    
-
-
+    ret.push_back(-1);
+    ret.push_back(-1);
+    return ret;
 }
 
 
 
-
+int main()
+{
+    return 1;
 }
-
-
-
 
 
