@@ -37,14 +37,21 @@ ListNode* addTwoNumbers(ListNode* la, ListNode* lb)
     if (!la && !lb)
         return nullptr;
     first_node = new ListNode(0);
-    first_node->next = last_node;
-
+    // ERROR: first_node->next = last_node; cause "Runtime: N/A".
+    last_node = first_node;
     while (la || lb || carry_flag)
     {
         int value = 0;
-        if (la)          value += la->val;
-        if (lb)          value += lb->val;
-        if (carry_flag)  value += 1;
+        if (la != nullptr) {
+            value += la->val;
+            la = la->next;  // ERROR: Forgot this step, so cause "Runtime: N/A"
+        }
+        if (lb != nullptr) {         
+            value += lb->val;
+            lb = lb->next;  // ERROR: Forgot this step, so cause "Runtime: N/A"
+        }
+        if (carry_flag == 1)  
+            value += 1;
         last_node->next = new ListNode(value % 10);
         last_node = last_node->next;
         carry_flag = (value >= 10)? 1:0; 
