@@ -52,6 +52,40 @@ string findLongestPalindrome1(string s) {
 }
 
 
+/** Solution 2: DP solution.                                                     */
+/* ----------------------------------------------------------------------------- */
+
+// Note: 
+// * A method to construct a two-dimensional matrix using vector.
+// * For example: create an 3*4 matrix[3][4] of type int. 
+// 
+// vector<vector<int>> matrix(3);            <---- define a matrix with 3 members
+// for (int i = 0; i < matrix.size(); ++i)
+//     matrix[i].resize(4);                  <---- each member is resized to 4 elements
+// OR:
+// vector<vector<int>> matrix(3, vector<int>(4));  
+// 
+
+// DP analysis:
+// Define a matrix of type bool, set matrix[i][j] true or false  
+// considering s[i] -> s[j] is palindrome or not.
+// For example, s = "abbc". matrix[i][j] means whether s[i] == s[j].
+// matrix = { 1, 0, 0, 0,      
+//            0, 1, 1, 0,    
+//            0, 0, 1, 0,   
+//            0, 0, 0, 1 };  
+// 
+// DP solution would be postponed to when I learn DP. 
+// http://fisherlei.blogspot.com/2012/12/leetcode-longest-palindromic-substring.html
+// http://bangbingsyb.blogspot.com/2014/11/leetcode-longest-palindromic-substring.html
+// 
+
+
+
+
+
+
+
 
 
 
