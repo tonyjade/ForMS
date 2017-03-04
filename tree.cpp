@@ -38,6 +38,26 @@ bool Search(BSTNode* root, int val) {
     }
 }
 
+int FindHeight(BSTNode* root) {
+    if (root == nullptr) {
+        return -1;
+    }
+    else if (!root->left && !root->right) {
+        return 0;
+    }
+    else {
+        int leftHeight = FindHeight(root->left);
+        int rightHeight = FindHeight(root->right);
+        if (leftHeight > rightHeight) {
+            return (leftHeight + 1);
+        }
+        else {
+            return (rightHeight + 1);
+        }
+    }
+}
+
+
 void InOrderTraverse(BSTNode* root) {
     if (root == nullptr) {
         return;
@@ -46,8 +66,6 @@ void InOrderTraverse(BSTNode* root) {
     cout << root->data << endl;
     InOrderTraverse(root->right);
 }
-
-
 
 
 int main() {
@@ -68,6 +86,10 @@ int main() {
     {
         cout << "Not found 22." << endl;
     }
+ 
+    int height = FindHeight(root);
+    cout << "Height is : " << height << endl;
+
     return 0;
 }
 
