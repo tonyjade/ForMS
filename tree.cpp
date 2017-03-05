@@ -42,9 +42,6 @@ int FindHeight(BSTNode* root) {
     if (root == nullptr) {
         return -1;
     }
-    else if (!root->left && !root->right) {
-        return 0;
-    }
     else {
         int leftHeight = FindHeight(root->left);
         int rightHeight = FindHeight(root->right);
@@ -67,6 +64,49 @@ void InOrderTraverse(BSTNode* root) {
     InOrderTraverse(root->right);
 }
 
+BSTNode* Find(BSTNode* root, int val) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+    else if (root->data == val) {
+        return root;
+    }
+    else if (root->data > val) {
+        return Find(root->left, val);
+    }
+    else if (root->data < val) {
+        return Find(root->right, val);
+    }
+}
+
+// Jaden: a bit tricky.
+BSTNode* GetInorderSuccessor(BSTNode* root, int val) {
+    BSTNode* current = Find(root, val);
+    if (current == nullptr) {
+        return nullptr;
+    }
+    if (current->right) {
+        BSTNode* tmp = current->right;
+        while (tmp->left) {
+            tmp = tmp->left;
+            return tmp;
+        }
+    }
+    else {
+        BSTNode* successor = nullptr;
+        BSTNode* ancestor = root;
+        while (ancestor != current) {
+            if (current->data < ancestor->data) {
+                successor = ancestor;
+                ancestor = succssor->left;
+            }
+            else {
+                ancestor = ancestor->right;
+            }
+        }
+        return successor;	
+    }
+}
 
 int main() {
     BSTNode* root = nullptr;
