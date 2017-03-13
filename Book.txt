@@ -1,0 +1,144 @@
+
+
+第3章 字符串
+
+-----------------------------------------------------------------------------------------------------------
+3.1 Valid Palindrome
+
+描述
+    Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring
+    cases.
+
+For example,
+    "A man, a plan, a canal: Panama" is a palindrome.
+    "race a car" is not a palindrome.
+
+Note: 
+    Have you consider that the string might be empty? This is a good question to ask during an interview.
+    For the purpose of this problem, we define empty string as valid palindrome.
+
+分析
+    无
+	
+代码
+    // Leet Code, Valid Palindrome
+    // 时间复杂度 O(n) 空间复杂度 O(1)
+    class Solution {
+    public:
+        bool isPalindrome(string s) {
+            transform(s.begin(), s.end(), s.begin(), ::tolower);
+            auto left = s.begin(), right = prev(s.end());
+            while (left < right) {
+                if (!::isalnum(*left)) ++left;
+                else if (!::isalnum(*right)) --right;
+                else if (*left != *right) return false;
+                else { left++, right--; }
+            }
+            return true;
+        }
+    };
+
+-----------------------------------------------------------------------------------------------------------
+3.2 Valid Palindrome
+
+描述
+    Implement strStr().
+    Returns a pointer to the first occurrence of needle in haystack, or null if needle is not part of 
+    haystack
+	
+分析
+    暴力算法O(m*n), 暂时也足够了，后续KMP等，无bug即可。
+
+代码
+    // LeetCode, Implement strStr()
+    // 时间复杂度 O(n) 空间复杂度 O(1)
+    class Solution {
+    public:
+        int strStr(const string& haystack, const string& needle) {
+            if (needle.empty()) return 0;
+            const int N = haystack.size() - needle.size() + 1;
+            for (int i = 0; i < N; i++) {
+                int j = i;
+                int k = 0;
+                while (j < haystack.size() && k < needle.size() && haystack[j] == needle[k]) {
+                    j++;
+                    k++;
+                }
+                if (k == needle.size()) return i;
+            }
+            return -1;
+        }
+    };	
+	
+
+
+-----------------------------------------------------------------------------------------------------------
+3.3 String to Integer (atoi)
+
+-----------------------------------------------------------------------------------------------------------
+3.4 Add Binary
+
+-----------------------------------------------------------------------------------------------------------
+3.5 Longest Palindromic Substring
+
+-----------------------------------------------------------------------------------------------------------
+3.6 Regular Expression Matching
+
+-----------------------------------------------------------------------------------------------------------
+3.7 Wildcard Matching
+
+-----------------------------------------------------------------------------------------------------------
+3.8 Longest Common Prefix
+
+-----------------------------------------------------------------------------------------------------------
+3.9 Valid Number
+
+-----------------------------------------------------------------------------------------------------------
+3.10 Integer to Roman
+
+-----------------------------------------------------------------------------------------------------------
+3.11 Roman to Integer
+
+-----------------------------------------------------------------------------------------------------------
+3.12 Count and Say
+
+-----------------------------------------------------------------------------------------------------------
+3.13 Anagrams
+
+-----------------------------------------------------------------------------------------------------------
+3.14 Simplify Path
+
+-----------------------------------------------------------------------------------------------------------
+3.15 Length of Last Word
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
