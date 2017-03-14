@@ -75,17 +75,149 @@ Note:
 3.3 String to Integer (atoi)
 
 描述
+    Implement atoi to convert a string to an integer.
 
+Hint: 
+    Carefully consider all possible input cases. If you want a challenge, please do not see below and
+    ask yourself what are the possible input cases.
 
+Notes: 
+    It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible
+    to gather all the input requirements up front.
 
+Requirements for atoi:
+    The function first discards as many whitespace characters as necessary until the first non-whitespace
+    character is found. Then, starting from this character, takes an optional initial plus or minus sign 
+    followed by as many numerical digits as possible, and interprets them as a numerical value.
+    The string can contain additional characters after those that form the integral number, which are ignored
+    and have no effect on the behavior of this function.
+    If the first sequence of non-whitespace characters in str is not a valid integral number, or if no such
+    sequence exists because either str is empty or it contains only whitespace characters, no conversion is 
+    performed.
+    If no valid conversion could be performed, a zero value is returned. If the correct value is out of the
+    range of representable values, INT_MAX (2147483647) or INT_MIN (-2147483648) is returned.
 
+分析:
+    细节题，注意几个测试用例：
+    1. 不规则输入，但是有效，"-593x83f", "+123"
+    2. 无效输入, "++c", "--1"
+    3. 溢出数据, "2147483648"
+
+代码:
+    // String to Integer (atoi)
+    // 时间复杂度 O(n)  空间复杂度 O(1)
+    class Solution {
+    public:
+        int myAtoi(const string &str) {
+            int num = 0;
+            int sign = 1;
+            const int n = str.length();
+            int i = 0;
+            while (str[i] == ' ' && i < n) i++;
+            if (str[i] == '+') {
+                i++;
+            } else if (str[i] == '-') {
+                sign = -1;
+                i++;
+            }
+
+            for (; i < n; i++) {
+                if (str[i] < '0' || str[i] > '9')
+                    break;
+                if ((num > INT_MAX / 10) ||
+                    (num == INT_MAX / 10 && (str[i] - '0') > INT_MAX % 10)) {
+                    return sign == -1 ? INT_MIN : INT_MAX;
+                }
+                num = num * 10 + str[i] - '0';
+            }
+            return num * sign;
+        }
+    };
 
 
 -----------------------------------------------------------------------------------------------------------
 3.4 Add Binary
 
+描述
+    Given two binary strings, return their sum (also a binary string).
+
+For example:
+    a = "11", b = "1"
+    Return "100".
+
+代码:
+    // Add binary.
+    // 时间复杂度 O(n)  空间复杂度 O(1)
+    class Solution {
+    public:
+        string addBinary(string a, string b) {
+            string result;
+            const size_t n = a.size() > b.size() ? a.size() : b.size();
+            reverse(a.begin(), a.end());
+            reverse(b.begin(), b.end());
+            int carry = 0;
+            for (size_t i = 0; i < n; i++) {
+                const int ai = i < a.size() ? a[i] - '0' : 0;
+                const int bi = i < b.size() ? b[i] - '0' : 0;
+                const int val = (ai + bi + carry) % 2;
+                carry = (ai + bi + carry) / 2;
+                result.insert(result.begin(), val + '0');
+            }
+            if (carry == 1) {
+                result.insert(result.begin(), '1');
+            }
+            return result;
+        }
+    };
+
+
 -----------------------------------------------------------------------------------------------------------
 3.5 Longest Palindromic Substring
+
+描述
+    Given a string S, find the longest palindromic substring in S. You may assume that the maximum length
+    of S is 1000, and there exists one unique longest palindromic substring.
+
+分析
+    思路一：暴力枚举，以每个元素为中间元素，向左右出发，复杂度为O(n^2)
+    思路二：记忆化搜索，复杂度O(n^2).
+            设f[i][j]表示[i, j]之间最长回文子串,递推如下：
+        f[i][j] = if (i == j) S[i]
+                  if (S[i] == S[j] && f[i+1][j-1] == S[i+1][j-1]) S[i][j]
+                  else max(f[i+1][j-1], f[i][j-1], f[i+1][j])
+
+    思路二：DP, 复杂度O(n^2)
+            转换方程为：
+        f(i, j) = |- true,                         i = j
+                  |- S[i] = S[j],                  j = i + 1
+                  |- S[i] = S[j] and f(i+1, j-1),  j > i + 1
+
+代码
+    // Longest Palindromic Substring
+    // DP, 时间复杂度 O(n^2) 空间复杂度O(n^2)
+    class Solution {
+    public:
+        string longestPalindrome(const string& s) {
+            const int n = s.size();
+            bool f[n][n];
+            fill_n(&f[0][0], n * n, false);
+
+            size_t max_len = 1, start = 0; 
+            for (size_t i = 0; i < s.size(); i++) {
+                f[i][i] = true;
+                for (size_t j = 0; j < i; j++) { // [j, i]
+                    f[j][i] = (s[j] == s[i] && (i - j < 2 || f[j + 1][i - 1]));
+                    if (f[j][i] && max_len < (i - j + 1)) {
+                        max_len = i - j + 1;
+                        start = j;
+                    }
+                }
+            }
+            return s.substr(start, max_len);
+        }
+    };
+
+
 
 -----------------------------------------------------------------------------------------------------------
 3.6 Regular Expression Matching
