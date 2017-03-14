@@ -28,10 +28,10 @@ Note:
         bool isPalindrome(string s) {
             transform(s.begin(), s.end(), s.begin(), ::tolower);
             auto left = s.begin(), right = prev(s.end());
-            while (left < right) {
-                if (!::isalnum(*left)) ++left;
+            while (left < right) {                       // Jaden: should be '<', not '!='.
+                if (!::isalnum(*left)) ++left;    
                 else if (!::isalnum(*right)) --right;
-                else if (*left != *right) return false;
+                else if (*left != *right) return false;  // Jaden: without 'else', cause error result.
                 else { left++, right--; }
             }
             return true;
@@ -39,7 +39,7 @@ Note:
     };
 
 -----------------------------------------------------------------------------------------------------------
-3.2 Valid Palindrome
+3.2 Implement strStr().
 
 描述
     Implement strStr().
@@ -71,9 +71,15 @@ Note:
     };	
 	
 
-
 -----------------------------------------------------------------------------------------------------------
 3.3 String to Integer (atoi)
+
+描述
+
+
+
+
+
 
 -----------------------------------------------------------------------------------------------------------
 3.4 Add Binary
