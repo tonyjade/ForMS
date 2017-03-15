@@ -122,7 +122,7 @@ Requirements for atoi:
             }
 
             for (; i < n; i++) {
-                if (str[i] < '0' || str[i] > '9')
+                if (str[i] < '0' || str[i] > '9') // Jaden: 没考虑space的情况吗? 
                     break;
                 if ((num > INT_MAX / 10) ||
                     (num == INT_MAX / 10 && (str[i] - '0') > INT_MAX % 10)) {
