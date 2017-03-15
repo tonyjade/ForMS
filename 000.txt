@@ -22,6 +22,22 @@ Usage of string:
     Note: s.substr(pos, len)
           pos -- Positon of the first character.
           len -- Number of characters, *** it's a number, not the end position ***
+4) string::iterator
+    Example:
+    --------------------------------------------------------------------------------
+    =>  int left = 0, right = s.size() - 1;
+    =>  string::iterator left = s.begin(), right = s.end();  // iterator等同于指针,取值用*left 和 *right.
+    =>  auto left = s.begin(), right = s.end();              // Combined with auto. 
+
+5) std::toupper    // to upper case.
+   std::tolower    // to lower case.
+   std::isalnum    // is alphanum, letters or digits.
+   std::isdigit    // is digit, 0-9.
+   std::isxdigit   // is hexadecimal, 0-9, A-F.
+   std::isspace    // is space.
+   std::ispunct    // is punctuation, neither spaces or digits or letters.
+
+
 
 Usage of algorithm:
 ---------------------------------------------------------------------------------------------------------------------
