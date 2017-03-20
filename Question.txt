@@ -56,6 +56,37 @@ static成员变量和成员函数
     
 
 -------------------------------------------------------------------------------------------------------------------
+operator new 和 new operator
+
+(一) 定义
+
+Example:
+    X *xp = new X;  
+Explain:
+    该部分new为new operator，将调用类X中的operator new，为该类对象分配内存，然后调用当前实例的构造函数。
+    因此，new operator包括operator new和object的构造函数。
+Example:
+    delete xp;  
+Explain:
+    该部分的delete为delete operator，它将调用该实例的析构函数，然后调用类X的operator delete，释放该实例内存空间。
+
+* 说明
+1. new operator 和 delete operator 不能改变，这是基于C++标准。
+2. operator new 和 malloc。
+   1) operator new 和 operator delete 和C中的malloc和free对应，只负责分配和释放内存空间。
+   2) 使用 operator new 和 operator delete 必须配对，不能使用 free 释放 operator new分配的空间，因为对内存使用的
+      登记方式不同。
+3. new operator 和 operator new的关系。
+   1) 调用operator new分配内存。
+   2) 调用构造函数生成对象。
+   3) 返回相应指针。 
+
+
+
+(二) Why use it ?
+
+为了效率，缺省的operator new/delete有通用性，但是特定场合可以进一步提高性能，比如：动态分配大量但是小的对象时。
+
 
 
 
