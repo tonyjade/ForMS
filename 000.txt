@@ -55,6 +55,12 @@ Usage of algorithm:
         Complier would say unresolved overloaded function type in the error message.
 
 
+
+
+
+
+
+
 Reference:
     http://stackoverflow.com/questions/7131858/stdtransform-and-toupper-no-matching-function/7132065#7132065
 
