@@ -88,6 +88,57 @@ Explain:
 为了效率，缺省的operator new/delete有通用性，但是特定场合可以进一步提高性能，比如：动态分配大量但是小的对象时。
 
 
+-------------------------------------------------------------------------------------------------------------------
+智能指针
+
+(一) unique_ptr -- A memory doesn't have to be shared. (无copy constructor)
+
+(二) shared_ptr -- A memory resource should be shared. 
+
+(三) weak_ptr -- holds a reference to an object managed by a shared_ptr, but doesn't contribute to the reference count.
+                 用于打破循环依赖，例如：parent和children的相互依赖。
+
+Example: Implementation
+
+template <typename T>
+class SmartPtr {
+public:
+    SmartPtr() : rp(new T) {};
+    SmartPtr(const SmartPtr<T> & sp) 
+
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
