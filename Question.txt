@@ -135,7 +135,77 @@ STL 容器适配器
 
 
 -------------------------------------------------------------------------------------------------------------------
-STL 容器适配器
+DataBase -- MySQL
+
+MySqlServer <---- MySqlClient
+
+登录：
+    mysql -h localhost -u root -p (什么都不写就是默认的localhost/root/nullpwd)
+    (登录就是 MySql client 连 server)
+
+查看数据库和表：
+    show databases; 
+    show tables;
+
+一个数据库包含多个表：
+    表是行列结构，多张表放在一个数据库，多个数据库放在一个database server。
+
+学号    姓名    地区    年龄    专业
+----------------------------------------------
+00001   马一方  山东    31      计算机
+00002   陈小双  江西    29      药物分析
+
+课号    课程      教室    老师
+----------------------------------------------
+0001    数据结构  301     马维旻
+0002    C语言     502     吕威
+
+使用某个数据库：
+    use XXXdatabase;
+
+认识SQL -- Structured Query Language
+
+DML -- Data Manipulation Language Statements (增、删、改、查)
+DDL -- Data Definition Language Statements   (建表、建库、建试图)
+DCL -- Data Control Language Statements      (管理权限)
+
+
+创建数据库：
+    create database goertek;
+删除数据库：
+    drop database goertek;
+使用goertek数据库：
+    use goertek;
+
+建立table：
+    (建表的过程就是声明列的过程)
+
+建表语句：
+    create table TableName (
+        列名1  列类型  列属性  默认值，
+        ... 
+        列名n  列类型  列属性  默认值
+    );
+
+Example:    
+mysql> create table employee (
+    ->     no    int,
+    ->     name  varchar(20),
+    ->     pay   int,
+    ->     level int
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_goertek |
++-------------------+
+| employee          |
++-------------------+
+1 row in set (0.00 sec)
+
+
+
 
 
 
