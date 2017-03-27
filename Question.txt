@@ -158,7 +158,6 @@ kill 默认执行的就是 -15 .
 
 
 -------------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
 DataBase -- MySQL
 
 MySqlServer <---- MySqlClient
@@ -230,16 +229,14 @@ mysql> show tables;
 
 
 
-=======
+-------------------------------------------------------------------------------------------------------------------
 同步互斥
 
 同步条件 -- pthread_cond_t
 
 使用 -- 配合mutex使用
 
-Example
->>>>>>> 19615b4258b0260341a79665af8948057297a0ef
-
+Example:
     pthread_cond_t  warpBufferConsumedCv;
     pthread_mutex_t warpBufferConsumedMutex;
 
