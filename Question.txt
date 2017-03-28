@@ -92,12 +92,9 @@ Explain:
 智能指针
 
 (一) unique_ptr -- A memory doesn't have to be shared. (无copy constructor)
-
 (二) shared_ptr -- A memory resource should be shared. 
-
-(三) weak_ptr -- holds a reference to an object managed by a shared_ptr, but doesn't contribute to the reference count.
-                 用于打破循环依赖，例如：parent和children的相互依赖。
-
+(三) weak_ptr   -- holds a reference to an object managed by a shared_ptr, but doesn't contribute to the reference count.
+                   用于打破循环依赖，例如：parent和children的相互依赖。
 
 ** shared_ptr 和 auto_ptr 的区别  **
 1. shared_ptr 共享，auto_ptr 独占。
@@ -107,15 +104,76 @@ Explain:
 
 Example: Implementation
 
+分析：
+    1) new一个SmartPtr对象，引用计数加1.
+    2) 解引用*，返回*this.
+    3) 拷贝构造，引用计数加1.
+    4) 赋值操作，左边引用计数减1，右边加1.
+
 template <typename T>
 class SmartPtr {
 public:
-    SmartPtr() : rp(new T) {};
-    SmartPtr(const SmartPtr<T> & sp) 
-
-
-
+    SmartPtr(T*);
+    SmartPtr(SmartPtr&);
+    T* operator->();
+    T& operator*();
+    SmartPtr& operator=(const SmartPtr&); 
+    ~SmartPtr();
+private:
+    int *count;
+    T *tp;
 };
+
+template <typename T>
+SmartPtr<T>::SmartPtr(T* p): count(new int(1)), tp(p) {
+
+}
+
+template <typename T>
+SmartPtr<T>::SmartPtr(SmartPtr& sp) {
+    count = &(++*sp.count);
+    tp = sp.tp;
+}
+
+template <typename T>
+T* SmartPtr<T>::operator->() {
+    return tp;
+}
+
+template <typename T>
+T& SmartPtr<T>::operator*() {
+    return *tp;
+}
+
+template <typename T>
+SmartPtr<T>& SmartPtr<T>::operator=(SmartPtr& sp) {
+    if (this == sp) {
+        return *this;
+    }
+    ++(*sp.count);
+    if (--(*count) == 0) {
+        delete count;
+        delete tp;
+    }
+    this->tp = sp.tp;  // 不会内存泄漏？？
+    this->count = sp.count;  
+    return *this;
+}
+
+
+-------------------------------------------------------------------------------------------------------------------
+public, protected and private 继承
+
+Property        Public Inheritance     Protected Inheritance     Private Inheritance
+______________________________________________________________________________________
+public members   |    public           |      protected          |     private        |
+protected members|    protected        |      protected          |     private        |
+private members  |  Only Base Access   |   Only Base Access      |   Only Base Access |
+______________________________________________________________________________________|
+* public 和 protected 可以隐式向上转换，但 private 不行~ *
+* private继承方式类似final的感觉，一切到该derived class就全终止了~
+
+
 
 
 -------------------------------------------------------------------------------------------------------------------
@@ -154,6 +212,29 @@ raymond@goertekssc-PowerEdge-R420:~$ kill -l
 9)  SIGKILL -- 基本都能立即响应。
 
 kill 默认执行的就是 -15 .
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------
+template
+
+在.h头文件中若有template function，在a.cpp和b.cpp分别利用该模板生成int型的函数。
+则同时有两个int型函数，编译器只关心各自的存在，而链接时会发现有两个int型函数，一般改变名字即可。
+** linker是所有语言通用的，只有complier是对C++特殊定制的。
+
+类模板：
+
+template <class T1, class T2>
+class A {
+public:
+   void f(T1 a, T2 b); 
+};
+
+template <class T1, class T2>
+void A<T1, T2>::f(T1 a, T2 b) {
+    cout << a << ", " << b << endl;
+}
 
 
 
