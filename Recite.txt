@@ -42,6 +42,7 @@ O
 -----------------------------------------------------------------------------------------------------------------------
 occluded                (2016-11-30)
 opaque                  (2016-11-30)
+optimal                 (2016-10-25-0)
 P
 -----------------------------------------------------------------------------------------------------------------------
 paradigm                (2016-11-30)
@@ -58,7 +59,7 @@ synopsis                (2016-11-8)
 
 T
 -----------------------------------------------------------------------------------------------------------------------
-tedious                 (2016-11-15)
+tedious                 (2016-11-15) (2017-2-1)
 tentative ['tɛntətɪv]   (2016-11-8)
 
 
@@ -68,6 +69,20 @@ variation               (2016-11-25-1)
 W
 -----------------------------------------------------------------------------------------------------------------------
 with respect to         (2016-11-11)
+
+
+
+
+EMC is a famous technical multinational company.
+The business of EMC covers data storage, data recovery, and information security.
+Not just business of big data, but also cloud, file system, IT service, and virtulizaiton.
+The famous vmware, I think most computer science people have used it.
+I know last year, EMC has been renamed to DELL EMC, just like the story of my former company, Alcatel-Lucent, then Nokia-Alcatel-lucent.
+After the merger and acquisition of Dell and EMC,
+The world has become more data-based and data-driven, I believe the future is much brighter for EMC. 
+
+
+
 
 
 
