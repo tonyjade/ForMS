@@ -318,21 +318,50 @@ mysql> show tables;
 使用 -- 配合mutex使用
 
 Example:
-    pthread_cond_t  warpBufferConsumedCv;
-    pthread_mutex_t warpBufferConsumedMutex;
+
+ pthread_cond_t  warpBufferConsumedCv; // 同步条件变量，需配合mutex共同使用，在lock/unlock之间pthread_con_wait，以防止进入wait前其他signal干扰。
+ pthread_mutex_t warpBufferConsumedMutex;
+
+(svrApiCore.cpp)
+
+svrSubmitFrame
+------------------------------------------------------------------------------------------
+1. 通过 App 传递的 pFrameParams, 完成赋值；
+   更新 gAppContext->modeContext->submitFrameCount. 
+
+2. 等待，直到 eyebuffer 渲染完毕
+while (true)
+{
+    // 等待TimeWarp线程发signal，告知TimeWarp已经取到图像
+    pthread_mutex_lock(&gAppContext->modeContext->warpBufferConsumedMutex);
+    pthread_cond_wait(&gAppContext->modeContext->warpBufferConsumedCv, &gAppContext->modeContext->warpBufferConsumedMutex);
+    pthread_mutex_unlock(&gAppContext->modeContext->warpBufferConsumedMutex);
+
+    if (...) {  // 如果一切正常，就 break;
+        break;
+    }
+}
 
 (TimeWarp.cpp)
 
- pthread_cond_t  warpBufferConsumedCv;
- pthread_mutex_t warpBufferConsumedMutex;
+ThreadMain
+------------------------------------------------------------------------------------------
 
+while (true) 
+{
+    从buffer取图像，未互斥，因为调用glClientWaitSync，也许有同步机制 ~
 
-while (true) {
-    if (!pthread_mutex_trylock(&gAppContext->modeContext->warpBufferConsumedMutex)) {
+    // 发送signal给渲染线程，可以进行渲染了~
+    if (!pthread_mutex_trylock(&gAppContext->modeContext->warpBufferConsumedMutex)) 
+    {
         pthread_cond_signal(&gAppContext->BufferConsumeCv);
         pthread_mutex_unlock(&gAppContext->BufferConsume);
     }
 }
+
+Question -- 如果渲染更快，会一直等待 ?
+A:
+    不会，渲染大约60Hz，送屏严格按照90Hz的屏幕Vsync信号~
 
 
 
