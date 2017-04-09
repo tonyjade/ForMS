@@ -25,6 +25,12 @@ struct Node {
     Node(const int i) : data(i), left(nullptr), right(nullptr) {};
 };
 
+/* 思路：
+ * 1. 递归思想，只是返回的是当前节点而已。
+ * 2. 在返回当前节点之前，递归左子树，找到它的最右节点，和当前节点的left关联。
+ * 3. 在返回当前节点之前，递归右子树，找到它的最左节点，和当前节点的right关联。
+ * 4. 关联完毕，返回当前节点。该算法的实现类似于后序遍历。
+ */
 Node* convert(Node* &root) {
     if (root == nullptr) {
         return root;
