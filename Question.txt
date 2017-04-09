@@ -36,6 +36,34 @@ reinpreter_cast和C style cast没有区别；
 const_cast用于把const类型转换为非const类型。
 
 
+dynamic_cast的例子：
+    避免code bloating (代码膨胀)
+
+例如：
+template class MyBase<class T> { ... };
+
+如果利用该模板对应生成对个类：
+MyBase<int>, MyBase<double>, MyBase<char>
+
+则编译器需要三次生成类代码：
+
+class MyBase_int {
+    ... //抄一遍MyBase<class T>
+};
+class MyBase_double {
+    ... //抄一遍MyBase<class T>
+};
+class MyBase_char {
+    ... //抄一遍MyBase<class T>
+};
+
+如果统一用<void*>或者用共同基类存放，则只一套代码，只是使用的时候用cast转换一下即可：
+vector<MyBase*> v;
+MyForm_Int* p = dynamic_cast<MyForm_Int*>(v[0]);
+
+
+
+
 -------------------------------------------------------------------------------------------------------------------
 static成员变量和成员函数
 
@@ -54,6 +82,81 @@ static成员变量和成员函数
 (二) static成员变量:
     可以被子类继承，只是取决于access permission，例如：public是可以共享访问的
     
+
+
+-------------------------------------------------------------------------------------------------------------------
+C++ 类成员函数调用delete this
+
+为什么类成员调用delete this可行？
+object只含有数据成员和vptr，代码单独放在类对象外，因此保证了该操作的可行性。
+
+析构函数调用delete this为什么不行？
+因为delete this本质就是调用析构函数，然后释放内存，析构函数调用delete this相当于无限循环调自己。
+
+注意点：
+1. 只有new出来的对象才能调用delete this。
+2. commit suicide的函数应当是最后调用的函数。
+3. 设计模式有个state pattern会用到这种情况, 用于状态转换。
+
+
+-------------------------------------------------------------------------------------------------------------------
+inline 关键字
+
+内联函数必须在调用该函数的每个cpp文件中定义，且对于同名的inline函数，不能有不同的实现，因此往往放在头文件中。
+
+* 太过复杂的代码不适合inline，例如：函数内有循环或者递归，则该函数不能用inline。
+* virtual函数不能inline，因为inline意味着"执行前，先将函数替换"，inline是编译期间的行为；
+  而virtual意味着 "等待，直到运行期间方能确定哪个函数执行"。
+
+inline的危害：
+* 增大目标代码(object code)，不恰当的使用会造成代码膨胀(code bloating)，导致 gigantic memory hog。
+
+inline和define的区别：
+* inline是编译期间的行为，#define是预处理期间的行为。inline仍是函数，会检查参数合法性。
+
+
+-------------------------------------------------------------------------------------------------------------------
+friend classes (友元类)
+
+C++类中friend关键字声明的对象可以访问该类的private和protected成员。
+可以是某个类、某个函数、或者某个类中的某个函数。
+friend的访问授权是编译时检查的。
+
+例如：friend member function
+
+class BinaryTree;  // 前向声明
+
+class Node {
+public:
+    void func(BinaryTree*);
+    ...
+};
+
+class BinaryTree {
+public:
+    friend void Node::func(BinaryTree*);  // class member friend 
+    ...
+};
+
+例如：friend member class
+
+class Node {
+public:
+    friend class BinaryTree;
+private:
+    int data
+    ...
+};
+
+BinaryTree {
+private:
+    Node *root;
+    void findNode(int key);  // 可以直接访问Node里的内容了 ~
+};
+
+
+
+
 
 -------------------------------------------------------------------------------------------------------------------
 operator new 和 new operator
