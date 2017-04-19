@@ -17,16 +17,58 @@ C++ Cast
 2) 空指针转为目标指针
 3) 同样可以用于指针和引用，如果对于类中对象之间的上下转换，如果向下转化有问题，编译时候不会报错，运行时会报错。
 
-(三) reinterpret_cast最广泛的转化，几乎同C-style转换
+例如：
+int display = 0;
+char displayId = '0' + static_cast<char>(display);  // displayId == "01", append display to displayId.
+
+(三) reinterpret_cast同样要求指针或者引用之间的转换，但是可以用于没有任何关系的类指针之间的转换
 
 适用于如下情况：
-1) int和指针转换
+1) int和指针转换，可以把int型直接转换为指针，当然new type需要时指针类型
 2) 无关联类指针之间转换
 3) 函数指针之间的转换
+
+* 对于reinterpret_cast<new_type>，要求new_type一定是指针或引用，否则编译出错。
+* 例如：可以把void* 转为 RenderManager*，也可以把 RenderManager*转为 void*，也可用于指向指针的指针的转换 ~
+
+例如：
+typedef void* OSVR_RenderManager;
+void RegisterRenderBuffers(OSVR_RenderManager renderManager, ...) {
+    auto rm = reinterpret_cast<RenderManager*>(renderManager);
+    rm->RegisterRenderBuffers(...);
+    return;
+}
+
 
 (四) const_cast
 
 用于去除转换对象的const和volatile
+
+* char* 可以赋值给const char*，反过来却不行，解决办法是用const_cast<char*> ~
+
+例如：
+void blas_gemm(const MatrixXf& a) {
+    segmm(const_cast<float*>(a.data()), ...);
+    return;
+}
+
+例如：
+struct vrpn_HANDLERPARAM {
+    const char *buffer;
+};
+vrpn_HANDLERPARAM p;
+const char* buf = p.buffer;  // 不加const不行，除非之前对p.buffer进行转换 ~
+
+delete[] const_cast<char*>(p.buffer);  // 自己的测试发现这里不加const_cast也行 ~
+
+
+
+
+* 即便p.buffer是const char*类型的，也一定是new出来的，而如果是以p.buffer = “abc”这种类型初始化的，无法使用delete，即便经过const转换。
+* 因为const_cast仅仅是表面上改变类型，内存中的位置还是一样的！
+
+
+
 
 小结
 
@@ -34,6 +76,7 @@ dynamic_cast用于父类子类指针和引用转化，最安全也最昂贵；
 static_cast类似带编译时检验的C style cast，编译器隐式转换是基于static_cast完成的；
 reinpreter_cast和C style cast没有区别；
 const_cast用于把const类型转换为非const类型。
+* 所有cast的转换对象都必须加括号！！！
 
 
 dynamic_cast的例子：
