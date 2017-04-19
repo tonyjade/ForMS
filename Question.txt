@@ -11,6 +11,9 @@ C++ Cast
 2) dynamic_cast用于引用转换 (和指针情况类似)
 3) 将nullptr指针转为任意类型指针，将任意类型指针转为void*指针
 
+* dynamic_cast是个运行时操作，但是它完全依赖虚函数表 ~
+* 如果某个两个类之间有继承关系，但是没有虚函数，那么dynamic_cast不能进行转化 ~
+
 (二) static_cast更宽泛
 
 1) 基本类型转换 (如：int => char, non-const => const对象, ...)
