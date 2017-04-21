@@ -51,7 +51,7 @@ void RegisterRenderBuffers(OSVR_RenderManager renderManager, ...) {
 
 例如：
 void blas_gemm(const MatrixXf& a) {
-    segmm(const_cast<float*>(a.data()), ...);
+    float* f = const_cast<float*>(a.data());
     return;
 }
 
@@ -64,6 +64,11 @@ const char* buf = p.buffer;  // 不加const不行，除非之前对p.buffer进�
 
 delete[] const_cast<char*>(p.buffer);  // 自己的测试发现这里不加const_cast也行 ~
 
+例如:
+void fun(const char* pc) {
+    char* tmp = conste_cast<char*>(pc);  // 不转的话会报错
+    tmp[0] = 's';  // Key: 当然，这个pc也必须是栈或者堆上的，如果是常量类型const char* pc = "aaa";这种也不行 ~
+                        ** 由于const_cast不能改变变量所指向的对象的const属性，因此往往用于const指针指向非const
 
 
 
