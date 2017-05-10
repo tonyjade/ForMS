@@ -1,0 +1,45 @@
+-------------------------------------------------------------------------------------------------------------------
+override & final
+
+* override可以避免某些隐含的错误~
+
+Example 1：
+////////////////////////////////////////////////////////////////////////////
+class Base {
+public:
+    virtual void f(int);
+};
+
+class Derived : public Base {
+public:
+    virtual void f(long long);  <---- 希望override，实际上是overload！！！
+};
+
+Example 2：
+////////////////////////////////////////////////////////////////////////////
+class Base {
+public:
+    virtual void f(int);
+};
+
+class Derived : public Base {
+public:
+    virtual void f(long long) override;  <---- 加上override，编译器会报错 ~
+};
+
+* final用于标识无法被重写的虚函数 ~
+Example 3：
+////////////////////////////////////////////////////////////////////////////
+class Final {
+public:
+    virtual void f(int) override final;
+};
+
+
+
+
+
+
+
+
+
