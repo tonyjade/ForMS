@@ -236,7 +236,6 @@ Explain:
    3) 返回相应指针。 
 
 
-
 (二) Why use it ?
 
 为了效率，缺省的operator new/delete有通用性，但是特定场合可以进一步提高性能，比如：动态分配大量但是小的对象时。
@@ -254,6 +253,26 @@ Explain:
 1. shared_ptr 共享，auto_ptr 独占。
 2. shared_ptr 可拷贝和赋值，auto_ptr 不能。
 3. shared_ptr 的缺点是可能造成循环引用。
+
+** Smart pointer的实质 ** 
+Smart pointer实际上是一个类，而并非指针，指针其实是类中的成员。
+由于看起来像一个指针，则需要重载 * operator，例如：*sp = 10; 实质需要把类sp中的指针中内容赋为10.
+由于看起来像一个指针，也需要重载 ->operator，例如：若sp是一个类对象，则可以通过 sp->func() 访问成员函数。
+定义一个Smart pointer对象，实质上也是在栈上，因此在函数终止处，实质上会调该对象的析构函数，在析构函数里通过delete释放资源，
+因此，表面上看我们没有调用delete，实际上在对象sp的析构函数里已经偷偷做了这个事情。
+例如：
+#include <memory>
+void func() 
+{
+    shared_ptr<Test> sp(new Test);
+}
+若执行func()，创建对象sp，调用sp的构造函数，构造函数里new了它所管理的对象；
+当func()执行完毕，表面上看没有delete智能指针sp，实质上sp是栈上的变量，本身也不需要delete，这里系统会自动释放sp，
+而释放sp需要调用其析构函数，在析构函数里才真正执行了delete操作。
+
+
+
+
 
 
 Example: Implementation
