@@ -270,9 +270,30 @@ void func()
 当func()执行完毕，表面上看没有delete智能指针sp，实质上sp是栈上的变量，本身也不需要delete，这里系统会自动释放sp，
 而释放sp需要调用其析构函数，在析构函数里才真正执行了delete操作。
 
+** Smart Pointer的赋值运算符 operator= **
+对于普通的指针，赋值运算符意味着两个指针指向同一内存，会导致二次释放内存的问题，在智能指针里，这是不“智能”的。
+因此，需要重写 operator=()（assignment operator）
+1. deep copy 替代 shallow copy，解决了两次释放内存的问题。
+2. 管理策略
+ 2-1 unique_ptr / auto_ptr
+   对于不同对象，引入了“所有权”的概念。析构函数调用时，只有该对象拥有所有权，才能释放该内存。
+   ownership的引入，这也是unique_ptr/auto_ptr的原理。
+ 2-2 shared_ptr
+   引入“引用计数”的概念，跟踪当前有多少智能指针指向某对象。
+   赋值操作（assignment）会导致引用计数加1，一个智能指针对象生命终结（调用析构函数），引用计数减1。
+   只有引用计数为1时，也就是当最后一个智能指针被释放时，才真正释放内存，这是shared_ptr的策略。
 
+** 为什么选择unique_ptr，而不是auto_ptr ? **
+例如：
+    auto_ptr<string> p1(new string("Hello"));
+    auto_ptr<string> p2;
+    p2 = p1;   // Ok, but p1 no longer points to valid data !!!
 
-
+    unique_ptr<string> p3(new string("Hello"));
+    unique_ptr<string> p4;
+    p4 = p3;  // Error, compile-time error, versus potential crash ~~~
+因此：
+unique_ptr更安全，
 
 
 Example: Implementation
