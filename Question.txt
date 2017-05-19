@@ -293,7 +293,23 @@ void func()
     unique_ptr<string> p4;
     p4 = p3;  // Error, compile-time error, versus potential crash ~~~
 因此：
-unique_ptr更安全，
+unique_ptr更安全，直接赋值只会导致编译错误，不会引起运行时可能得core dump。
+
+** unque_ptr 允许赋值的情景 -- 作为函数返回值 **
+例如：
+unique_ptr<string> Demo(const char * s) {
+    unique_ptr<string> temp(new string(s));
+    return temp;
+}
+
+int main() {
+    unique_ptr<string> sp;
+    sp = Demo("Hello");
+    return 0;
+}
+
+在这里Demo()会返回一个临时unique_ptr，
+
 
 
 Example: Implementation
