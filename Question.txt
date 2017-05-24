@@ -308,7 +308,10 @@ int main() {
     return 0;
 }
 
-在这里Demo()会返回一个临时unique_ptr，
+在这里Demo()会返回一个临时unique_ptr，由于临时的temp很快就被销毁了，不会造成unique_ptr误用，
+所以这里的assignment operator是被允许的。
+** 总之，如果源对象是临时右值，assignment是允许的；如果源对象维持一段时间（have some duration）
+** 则assignment操作不被允许。   
 
 
 
