@@ -310,8 +310,19 @@ int main() {
 
 在这里Demo()会返回一个临时unique_ptr，由于临时的temp很快就被销毁了，不会造成unique_ptr误用，
 所以这里的assignment operator是被允许的。
+
 ** 总之，如果源对象是临时右值，assignment是允许的；如果源对象维持一段时间（have some duration）
 ** 则assignment操作不被允许。   
+例如：
+    unique_ptr<string> sp1(new string "hello");
+    unique_ptr<string> sp2;
+    sp2 = sp1;                                      // # 1 not allowed.
+    unique_ptr<string> sp3; 
+    sp3 = unique_ptr<string>(new string "hello");   // # 2 allowed.
+** # 1 是持续左值的情况，不允许；# 2 是临时右值的情况，允许。
+
+
+
 
 
 
