@@ -312,7 +312,7 @@ int main() {
 所以这里的assignment operator是被允许的。
 
 ** 总之，如果源对象是临时右值，assignment是允许的；如果源对象维持一段时间（have some duration）
-** 则assignment操作不被允许。   
+** 则assignment操作不被允许。因为左值持久，右值短暂 ~~   
 例如：
     unique_ptr<string> sp1(new string "hello");
     unique_ptr<string> sp2;
@@ -320,6 +320,9 @@ int main() {
     unique_ptr<string> sp3; 
     sp3 = unique_ptr<string>(new string "hello");   // # 2 allowed.
 ** # 1 是持续左值的情况，不允许；# 2 是临时右值的情况，允许。
+
+unique_ptr 比 auto_ptr 的另一个优势是它支持数组操作 ~
+
 
 
 
