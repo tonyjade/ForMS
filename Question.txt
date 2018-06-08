@@ -140,6 +140,7 @@ C++ 类成员函数调用delete this
 
 为什么类成员调用delete this可行？
 object只含有数据成员和vptr，代码单独放在类对象外，因此保证了该操作的可行性。
+delete this 本质上就是调用析构函数，只要后续代码不再使用该对象任何非静态成员就可以。
 
 析构函数调用delete this为什么不行？
 因为delete this本质就是调用析构函数，然后释放内存，析构函数调用delete this相当于无限循环调自己。
@@ -215,12 +216,12 @@ operator new 和 new operator
 (一) 定义
 
 Example:
-    X *xp = new X;  
+    X *xp = new X;
 Explain:
     该部分new为new operator，将调用类X中的operator new，为该类对象分配内存，然后调用当前实例的构造函数。
     因此，new operator包括operator new和object的构造函数。
 Example:
-    delete xp;  
+    delete xp;
 Explain:
     该部分的delete为delete operator，它将调用该实例的析构函数，然后调用类X的operator delete，释放该实例内存空间。
 
